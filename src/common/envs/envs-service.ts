@@ -1,6 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
-import { EnvironmentVariables } from 'src/common/envs/env-variables';
+import { EnvironmentVariables } from './env-variables';
 
 export class EnvsService {
   private static _instance: EnvsService;
@@ -28,5 +28,19 @@ export class EnvsService {
   }
   getNodeEnv(): string {
     return process.env.NODE_ENV || 'development';
+  }
+  getPostgresConfig() {
+    return {
+      type: 'postgres' as const,
+      host: process.env.POSTGRES_HOST,
+      port: Number(process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USERNAME,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      autoLoadEntities: true,
+      synchronize: true,
+      retryAttempts: 10,
+      retryDelay: 3000,
+    };
   }
 }
