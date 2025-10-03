@@ -26,21 +26,12 @@ export class EnvsService {
   getPort(): number {
     return Number(process.env.PORT) || 3000;
   }
-  getNodeEnv(): string {
-    return process.env.NODE_ENV || 'development';
-  }
-  getPostgresConfig() {
+  getJwtConfig() {
     return {
-      type: 'postgres' as const,
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USERNAME,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      autoLoadEntities: true,
-      synchronize: true,
-      retryAttempts: 10,
-      retryDelay: 3000,
+      accessSecret: process.env.JWT_ACCESS_SECRET,
+      refreshSecret: process.env.JWT_REFRESH_SECRET,
+      accessExpiry: process.env.JWT_ACCESS_EXPIRY,
+      refreshExpiry: process.env.JWT_REFRESH_EXPIRY,
     };
   }
 }

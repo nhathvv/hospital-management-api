@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { EnvsService } from './common/envs/envs-service';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(EnvsService.getInstance().getPostgresConfig()),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

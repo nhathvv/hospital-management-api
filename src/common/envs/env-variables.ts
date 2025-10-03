@@ -27,4 +27,20 @@ export class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   POSTGRES_DB: string;
+  
+  @IsString()
+  @IsNotEmpty()
+  JWT_ACCESS_SECRET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH_SECRET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_ACCESS_EXPIRY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH_EXPIRY: string;
 }
