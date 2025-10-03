@@ -7,10 +7,10 @@ services:
     env_file: .env
     container_name: postgres
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-
+  
   app:
     build:
       context: .
@@ -35,3 +35,6 @@ services:
       - '5050:80'
     depends_on:
       - db
+
+volumes:
+  pgdata:
