@@ -34,4 +34,10 @@ export class EnvsService {
       refreshExpiry: process.env.JWT_REFRESH_EXPIRY,
     };
   }
+  getNodeEnv(): string {
+    return process.env.NODE_ENV || 'development';
+  }
+  isDevelopmentMode(): boolean {
+    return this.getNodeEnv() === 'development';
+  } 
 }
