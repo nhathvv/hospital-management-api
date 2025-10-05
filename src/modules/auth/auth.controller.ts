@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
-import { LoginDto, RegisterDto } from './dto/register.dto';
+import { LoginDto, RefreshTokenDto, RegisterDto } from './dto/register.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { AuthUser } from '../../shared/decorators/auth-user.decorator';
 import type { TokenPayload } from '../../modules/auth/interfaces/auth-response.interface';
@@ -28,5 +28,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Lấy thông tin người dùng' })
   async getMe(@AuthUser() authUser: TokenPayload) {
     return this.authService.getMe(authUser);
+  }
+
+  @Post('refresh-token')
+  @ApiOperation({ summary: 'Làm mới access token và refresh token' })
+  @ApiBody({ type: RefreshTokenDto })
+  async refreshToken(@Body() dto: RefreshTokenDto) {
+    return this.authService.refreshToken(dto);
   }
 }

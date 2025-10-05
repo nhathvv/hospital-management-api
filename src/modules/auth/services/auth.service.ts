@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { LoginDto, RegisterDto } from '../dto/register.dto';
+import { LoginDto, RefreshTokenDto, RegisterDto } from '../dto/register.dto';
 import { LoginResponse, RegisterResponse, TokenPayload } from '../interfaces/auth-response.interface';
 import { UserRepository } from '../repositories/user.repository';
 import { RefreshTokenRepository } from '../repositories/refresh-token.repository';
@@ -85,5 +85,49 @@ export class AuthService {
     }
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
+  }
+
+  async refreshToken(dto: RefreshTokenDto) {
+    const { refreshToken } = dto;
+    
+    let payload;
+    try {
+      payload = this.tokenService.verifyRefreshToken(refreshToken);
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    const existingToken = await this.refreshTokenRepository.findByToken(refreshToken);
+    if (!existingToken) {
+      throw new UnauthorizedException('Refresh token not found');
+    }
+
+    if (existingToken.expiresAt < new Date()) {
+      await this.refreshTokenRepository.delete(refreshToken);
+      throw new UnauthorizedException('Refresh token has expired');
+    }
+
+    const user = await this.userRepository.findById(payload.userId);
+    if (!user) {
+      throw new BadRequestException(ERROR_MESSAGES.USER.USER_NOT_FOUND);
+    }
+
+    const [newAccessToken, newRefreshToken] = await Promise.all([
+      this.tokenService.generateAccessToken({ userId: user.id, role: user.role }),
+      this.tokenService.generateRefreshToken({ userId: user.id })
+    ]);
+
+    await this.refreshTokenRepository.delete(refreshToken);
+
+    await this.refreshTokenRepository.create({
+      token: newRefreshToken,
+      userId: user.id,
+      expiresAt: existingToken.expiresAt
+    });
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken
+    };
   }
 }
