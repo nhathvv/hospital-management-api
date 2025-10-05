@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { LoginDto, RegisterDto } from '../dto/register.dto';
-import { RegisterResponse } from '../interfaces/auth-response.interface';
+import { LoginResponse, RegisterResponse } from '../interfaces/auth-response.interface';
 import { UserRepository } from '../repositories/user.repository';
 import { RefreshTokenRepository } from '../repositories/refresh-token.repository';
 import { TokenService } from './token.service';
@@ -47,7 +47,7 @@ export class AuthService {
     });
     return { accessToken, refreshToken };
   }
-  async login(dto: LoginDto){
+  async login(dto: LoginDto): Promise<LoginResponse> {
     const { email, password } = dto;
     const user = await this.userRepository.findByEmail(email)
     if (!user) {
