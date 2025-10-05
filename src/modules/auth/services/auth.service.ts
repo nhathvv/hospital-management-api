@@ -17,10 +17,14 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto): Promise<RegisterResponse> {
-    const { username, password, fullName, phone, status } = dto;
+    const { username, password, fullName, phone, email } = dto;
     const existingUsername = await this.userRepository.existsByUsername(username);
     if (existingUsername) {
      throw new BadRequestException(ERROR_MESSAGES.USER.USERNAME_TAKEN);
+    }
+    const existingEmail = await this.userRepository.existsByEmail(email);
+    if (existingEmail) {
+      throw new BadRequestException(ERROR_MESSAGES.USER.EMAIL_TAKEN);
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await this.userRepository.create({
@@ -28,7 +32,8 @@ export class AuthService {
       password: hashedPassword,
       fullName,
       phone,
-      status: status || UserStatus.ACTIVE,
+      status: UserStatus.ACTIVE,
+      email,
       role: Role.Patient
     });
     const [accessToken, refreshToken] = await Promise.all([
@@ -43,13 +48,13 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
   async login(dto: LoginDto){
-    const { username, password } = dto;
-    const user = await this.userRepository.findByUsername(username);
+    const { email, password } = dto;
+    const user = await this.userRepository.findByEmail(email)
     if (!user) {
       throw new BadRequestException(ERROR_MESSAGES.USER.USER_NOT_FOUND);
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
       throw new BadRequestException(ERROR_MESSAGES.USER.INVALID_PASSWORD);
     }
     const [accessToken, refreshToken] = await Promise.all([

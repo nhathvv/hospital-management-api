@@ -1,14 +1,14 @@
 FROM node:22-alpine
 
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
 COPY package*.json ./
-
-RUN npm install
+RUN npm ci
 
 COPY prisma ./prisma/
 RUN npx prisma generate
-COPY . .
 
-RUN npm run build
-CMD [ "npm", "run", "start:dev" ]
+COPY . .
+CMD ["npm", "run", "start:dev"]

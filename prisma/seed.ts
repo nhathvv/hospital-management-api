@@ -13,7 +13,8 @@ async function main() {
       password: hashedPassword,
       fullName: 'System Administrator',
       phone: '+1234567890',
-      role: 'Admin'
+      role: 'Admin',
+      email: 'admin@gmail.com'
     },
   });
 }

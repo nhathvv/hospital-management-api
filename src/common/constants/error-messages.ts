@@ -4,6 +4,7 @@ export const ERROR_MESSAGES = {
     USERNAME_TAKEN: 'UsernameIsAlreadyTaken',
     USER_NOT_FOUND: 'UserNotFound',
     INVALID_PASSWORD: 'InvalidPassword',
+    EMAIL_TAKEN: 'EmailIsAlreadyTaken',
   },
   ROLE: {
     NOT_FOUND: 'RoleNotFound',

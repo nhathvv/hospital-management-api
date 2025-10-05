@@ -29,16 +29,17 @@ export class RegisterDto {
   @ApiProperty({ example: '0909090909' })
   phone: string;
 
-  @IsOptional()
-  @IsEnum(UserStatus)
-  @ApiProperty({ example: UserStatus.ACTIVE, enum: UserStatus })
-  status?: UserStatus;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  @ApiProperty({ example: 'nhathv.21it@gmail.com' })
+  email: string;
 }
 export class LoginDto {
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'nhathv' })
-  username: string;
+  @ApiProperty({ example: 'nhathv.21it@gmail.com' })
+  email: string;
 
   @IsString()
   @IsNotEmpty()
