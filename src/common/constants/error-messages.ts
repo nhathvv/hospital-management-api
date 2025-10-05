@@ -10,4 +10,10 @@ export const ERROR_MESSAGES = {
   ROLE: {
     NOT_FOUND: 'RoleNotFound',
   },
+  AUTH: {
+    INVALID_REFRESH_TOKEN: 'InvalidRefreshToken',
+    REFRESH_TOKEN_NOT_FOUND: 'RefreshTokenNotFound',
+    REFRESH_TOKEN_EXPIRED: 'RefreshTokenExpired',
+    INVALID_TOKEN_PAYLOAD: 'InvalidTokenPayload',
+  },
 };

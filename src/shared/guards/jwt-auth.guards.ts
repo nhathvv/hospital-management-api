@@ -1,8 +1,9 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { TokenExpiredError } from 'jsonwebtoken';
 import { AuthGuard } from '@nestjs/passport';
 import { ERROR_MESSAGES } from '../../common/constants/error-messages';
+import { ExceptionUtils } from '../../common/utils/exception.utils';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -13,9 +14,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err: any, user: any, info: any) {
     if (err || !user) {
       if (info instanceof TokenExpiredError) {
-        throw new UnauthorizedException(ERROR_MESSAGES.USER.EXPIRED_TOKEN.toString());
+        ExceptionUtils.throwUnauthorized(ERROR_MESSAGES.USER.EXPIRED_TOKEN.toString());
       }
-      throw new UnauthorizedException(info?.message || 'Unauthorized access');
+      ExceptionUtils.throwUnauthorized(info?.message || 'Unauthorized access');
     }
     return user;
   }
