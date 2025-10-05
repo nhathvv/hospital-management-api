@@ -66,6 +66,16 @@ export class AuthService {
       userId: user.id,
       expiresAt: this.tokenService.getRefreshTokenExpiry()
     });
-    return { accessToken, refreshToken };
+    const results = {
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        fullName: user.fullName,
+      },
+      accessToken,
+      refreshToken
+    }
+    return results;
   }
 }
