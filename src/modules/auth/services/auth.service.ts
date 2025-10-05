@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { LoginDto, RegisterDto } from '../dto/register.dto';
-import { LoginResponse, RegisterResponse } from '../interfaces/auth-response.interface';
+import { LoginResponse, RegisterResponse, TokenPayload } from '../interfaces/auth-response.interface';
 import { UserRepository } from '../repositories/user.repository';
 import { RefreshTokenRepository } from '../repositories/refresh-token.repository';
 import { TokenService } from './token.service';
@@ -77,5 +77,13 @@ export class AuthService {
       refreshToken
     }
     return results;
+  }
+  async getMe(authUser: TokenPayload) {
+    const user = await this.userRepository.findById(authUser.userId)
+    if (!user) {
+      throw new BadRequestException(ERROR_MESSAGES.USER.USER_NOT_FOUND);
+    }
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 }
