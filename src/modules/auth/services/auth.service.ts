@@ -126,4 +126,8 @@ export class AuthService {
       refreshToken: newRefreshToken
     };
   }
+
+  async logout(authUser: TokenPayload) {
+   return await this.refreshTokenRepository.deleteByUserId(authUser.userId);
+  }
 }

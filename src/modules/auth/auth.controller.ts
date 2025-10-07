@@ -36,4 +36,12 @@ export class AuthController {
   async refreshToken(@Body() dto: RefreshTokenDto) {
     return this.authService.refreshToken(dto);
   }
+
+  @Post('logout')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Đăng xuất' })
+  async logout(@AuthUser() authUser: TokenPayload) {
+    return this.authService.logout(authUser);
+  }
 }
