@@ -7,3 +7,7 @@ export enum Role {
   Doctor = 'Doctor',
   Patient = 'Patient',
 }
+export enum DepartmentStatus {
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+}

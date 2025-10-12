@@ -16,4 +16,8 @@ export const ERROR_MESSAGES = {
     REFRESH_TOKEN_EXPIRED: 'RefreshTokenExpired',
     INVALID_TOKEN_PAYLOAD: 'InvalidTokenPayload',
   },
+  DEPARTMENT: {
+    NOT_FOUND: 'DepartmentNotFound',
+    NAME_ALREADY_EXISTS: 'DepartmentNameAlreadyExists',
+  },
 };
